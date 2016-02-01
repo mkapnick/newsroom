@@ -4,84 +4,71 @@ var nytimes     = require('./feed/nytimes.js');
 var guardian    = require('./feed/guardian.js');
 var googleNews  = require('./feed/googleNews.js');
 var levenshtein = require('./utils/levenshtein.js');
+const _         = require('underscore');
 var Promise     = require('bluebird');
+
+
+/**
+ * Returns the levenshtein distance between 2 strings
+ *
+ * @param article
+ * @param otherArticle
+ * @private
+ */
+function _compare(articleName, otherArticleName) {
+  return levenshtein.compare()(articleName, otherArticleName);
+}
 
 var sourceHandlers = {
   webhose: () => webhose.query(),
   nytimes: () => nytimes.query(),
   guardian: () => guardian.query(),
-  googleNews: () => googleNews.query(),
   all: () => {
-    let similarity, currentValue, levenshteinMap, dataArray = [];
+    let similarity, currentValue, tmpArticle,
+        checkedArray, content = [];
+
     return Promise.all([
       webhose.query(),
       nytimes.query(),
       guardian.query(),
-      googleNews.query()
-    ]).spread((webhoseData, nytimesData, guardianData, gNewsData) => {
-      return { webhoseData, nytimesData, guardianData, gNewsData };
+    ]).spread((webhoseData, nytimesData, guardianData) => {
+      return { webhoseData, nytimesData, guardianData };
     })
     .then(data => {
 
-      data.webhoseData.forEach((whPost, index) => { //100 results
-        levenshteinMap = {name: whPost.name, value: 100, color: '#128fd4'};
+      content       = content.concat(data.webhoseData);
+      content       = content.concat(data.nytimesData);
+      content       = content.concat(data.guardianData);
+      currentValue  = 40; //threshold
 
-        //compare with guardian data set
-        data.guardianData.forEach(guardianPost => {
-          currentValue  = levenshteinMap.value;
-          similarity    = levenshtein.compare()(whPost.name, guardianPost.name);
-          if(similarity < currentValue) {
-            levenshteinMap.name  = guardianPost.name;
-            levenshteinMap.value = similarity;
-            levenshteinMap.color = '#146643';
+      console.log(content.length);
+      content.forEach((thisArticle, index) => {
+        checkedArray = [];
+        content.forEach((otherArticle, otherIndex) => {
+          if(thisArticle.name !== otherArticle.name &&
+            !_.contains(checkedArray, otherArticle.name)) {
+            checkedArray.push(otherArticle.name);
+            similarity = _compare(thisArticle.name, otherArticle.name);
+            if(similarity < currentValue) {
+              tmpArticle            = {};
+              tmpArticle.name       = thisArticle.name;
+              tmpArticle.similarity = similarity;
+
+              content[index].relationships.push(tmpArticle);
+              _.sortBy(content[index].relationships, 'similarity');
+              content[index].size = content[index].relationships.length;
+              //currentValue = similarity;
+            }
           }
         });
-
-        //compare with google news data
-        data.gNewsData.forEach(gNewsPost => {
-          currentValue  = levenshteinMap.value;
-          similarity    = levenshtein.compare()(whPost.name, gNewsPost.name);
-          if(similarity < currentValue) {
-            levenshteinMap.name  = gNewsPost.name;
-            levenshteinMap.value = similarity;
-            levenshteinMap.color = '#93811d';
-          }
-        });
-
-        //compare with nytimes data set
-        data.nytimesData.forEach(nytPost => {
-          currentValue  = levenshteinMap.value;
-          similarity    = levenshtein.compare()(whPost.name, nytPost.name);
-          if(similarity < currentValue) {
-            levenshteinMap.name  = nytPost.name;
-            levenshteinMap.value = similarity;
-            levenshteinMap.color = '#57068c'; //nyu purple
-          }
-        });
-
-        if(levenshteinMap.value === 100) {
-          if(levenshteinMap.name.length > 50) {
-            levenshteinMap.name = levenshteinMap.name.substring(0, 50) + '...';
-            levenshteinMap.value = 99; //give it some value
-          }
-        }
-
-        levenshteinMap.value = convertRatio(levenshteinMap.value);
-
-        if(!dataArray.some((l) => l.name === levenshteinMap.name )) {
-          //check length of name
-          if(levenshteinMap.name.length > 100) {
-            levenshteinMap.name = levenshteinMap.name.substring(0, 100) + '...';
-          }
-          dataArray.push(levenshteinMap);
-        }
+        //console.log(content[index]);
       });
+      return content;
     })
-    .then(() => {
-      console.log('finished!!!');
-      console.log('length is: ' + dataArray.length);
-      console.log(JSON.stringify(dataArray));
-      return dataArray;
+    .then((_content) => {
+      console.log('done');
+      console.log('length is: ' + _content.length);
+      return _content;
     })
   }
 };

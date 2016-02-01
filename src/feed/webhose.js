@@ -1,5 +1,7 @@
+'use strict';
 var unirest   = require('unirest');
 var Promise   = require('bluebird');
+var prettyDate= require('../utils/prettyDate.js');
 
 function getWebhoseData() {
   var finalResult = [], data;
@@ -10,13 +12,17 @@ function getWebhoseData() {
                 "%20physician%20language%3A(english)%20thread.country%3AUS")
     .header("Accept", "text/plain")
     .end(function (result) {
-      //console.log(result.status, result.headers, result.body);
-      console.log('got webhose data...........');
       result.body.posts.map(post => {
         data = {};
         data.value  = 2;
         data.name   = post.thread.title;
-        data.color = .8;
+        data.color = '#57068c';
+        data.date  = prettyDate(post.published);
+        data.source = 'Webhose';
+        data.relationships = [];
+        data.size = 0;
+        data.url    = post.url;
+
         finalResult.push(data);
       });
 

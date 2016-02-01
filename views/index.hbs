@@ -5,8 +5,9 @@
 
 <div id="treemap"></div>
 
+<script src="http://momentjs.com/downloads/moment.min.js"></script>
 <script src="http://www.d3plus.org/js/d3.js"></script>
-<script src="http://www.d3plus.org/js/d3plus.js"></script>
+<script src="/static/d3plus.js"></script>
 
 
 <script>
@@ -15,8 +16,11 @@
    * @type {*[]}
    */
 
-  var TreeMap = {};
+  var date, TreeMap = {};
 
+  date = moment(new Date()).format('YYYY/MM/DD');
+
+  console.log(date);
   TreeMap.treeData = {};
 
   TreeMap.showData = function(callback) {
@@ -26,8 +30,6 @@
       dataType: 'json',
       success: function(data) {
         if(data) {
-          console.log('GOT DATA BACK');
-          console.log(JSON.stringify(data));
           TreeMap.treeData = data;
           callback();
         }
@@ -38,16 +40,42 @@
   TreeMap.render = function() {
     var visualization;
 
-    visualization = d3plus.viz()
-                    .container("#treemap")  // container DIV to hold the visualization
-                    .data(TreeMap.treeData)  // data to use with the vis
-                    .type("tree_map")   // visualization type
-                    .id("name")         // key for which our data is unique on
-                    .size("value")      // sizing of blocks
-                    .dev(true)
-                    .color('color')
-                    .style("font-size","34px")
-                    .draw();             // finally, draw the visualization!
+    var defaults = {
+      "width": 300,
+      "height": 200,
+      "resize": true
+    }
+
+    d3plus.textwrap().resize(true);
+
+    d3plus.viz()
+    .container("#treemap")  // container DIV to hold the visualization
+    .data(TreeMap.treeData)  // data to use with the vis
+    .type("tree_map")   // visualization type
+    .id(['name'])         // key for which our data is unique on
+    .size("size")      // sizing of blocks
+    .dev(true)
+    .time({
+      "value" : "date",
+      "solo" : date,
+    })
+    .color('color')
+    .format({
+      "text": function(text, params) {
+
+        if (text === "size") {
+          return "Number of related articles";
+        }
+        else if (text === 'share') {
+          return 'Title similarity'
+        }
+        else {
+          return d3plus.string.title(text, params);
+        }
+
+      }
+    })
+    .draw();             // finally, draw the visualization!
   }
 
   TreeMap.build = function() {
