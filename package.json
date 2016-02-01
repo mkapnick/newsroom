@@ -18,8 +18,10 @@
   "author": "michael kapnick",
   "license": "ISC",
   "devDependencies": {
+    "bluebird": "^3.2.1",
     "bootstrap": "^3.3.6",
     "d3": "^3.5.14",
+    "dateformat": "^1.0.12",
     "express": "^4.13.4",
     "hbs": "^4.0.0",
     "jquery": "^2.2.0",
