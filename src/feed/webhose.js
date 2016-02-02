@@ -14,7 +14,6 @@ function getWebhoseData() {
     .end(function (result) {
       result.body.posts.map(post => {
         data = {};
-        data.value  = 2;
         data.name   = post.thread.title;
         data.color = '#57068c';
         data.date  = prettyDate(post.published);

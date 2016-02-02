@@ -19,7 +19,6 @@ function getGuardianData() {
     .end(function (result) {
       result.body.response.results.map(post => {
         data = {};
-        data.value  = 2;
         data.name   = post.webTitle;
         data.color  = '#57068c';
         data.date   = prettyDate(post.webPublicationDate);

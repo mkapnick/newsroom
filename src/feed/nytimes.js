@@ -102,7 +102,6 @@ function _queryArticlesAPI(page, date) {
       if(result.body.response) {
         result.body.response.docs.map(post => {
           data = {};
-          data.value  = 2;
           data.name   = post.headline.main;
           data.color  = '#57068c';
           data.date   = prettyDate(post.pub_date);

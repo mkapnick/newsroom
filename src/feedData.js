@@ -41,7 +41,6 @@ var sourceHandlers = {
       content       = content.concat(data.guardianData);
       currentValue  = 40; //threshold
 
-      console.log(content.length);
       content.forEach((thisArticle, index) => {
         checkedArray = [];
         content.forEach((otherArticle, otherIndex) => {
@@ -66,8 +65,6 @@ var sourceHandlers = {
       return content;
     })
     .then((_content) => {
-      console.log('done');
-      console.log('length is: ' + _content.length);
       return _content;
     })
   }

@@ -38,15 +38,6 @@
   }
 
   TreeMap.render = function() {
-    var visualization;
-
-    var defaults = {
-      "width": 300,
-      "height": 200,
-      "resize": true
-    }
-
-    d3plus.textwrap().resize(true);
 
     d3plus.viz()
     .container("#treemap")  // container DIV to hold the visualization
@@ -84,103 +75,6 @@
 
   TreeMap.build();
 
-  /*var sample_data = [
-    {"value": 50, "name": "alpha", data: 'tetetetetettet'},
-    {"value": 30, "name": "beta"},
-    {"value": 20, "name": "gamma"},
-    {"value": 15, "name": "delta"},
-    {"value": 5, "name": "epsilon"},
-    {"value": 1, "name": "zetaaaaaaaa"}
-  ];
-
-  visualization = d3plus.viz()
-          .container("#treemap")  // container DIV to hold the visualization
-          .data(sample_data)  // data to use with the visualization
-          .type("tree_map")   // visualization type
-          .id("name")         // key for which our data is unique on
-          .size("value")      // sizing of blocks
-          .draw();             // finally, draw the visualization!
-
-  // instantiate d3plus*/
-
-
-
-  /*var treeData = {
-  name: 'usa',
-  value: 100,
-  children: [
-    {
-      name: 'new york',
-      value: 75,
-      children: [
-        {
-          name: 'rockland county',
-          value: 25
-        },
-        {
-          name: 'putnam county',
-          value: 30
-        }
-      ]
-    },
-    {
-      name: 'new jersey',
-      value: 75,
-      children: [
-        {
-          name: 'woodcliff lake',
-          value: 25
-        },
-        {
-          name: 'paramous',
-          value: 25
-        }
-      ]
-    },
-    {
-      name: 'virginia',
-      value: 75
-    }
-  ]
-};
-
-var color = d3.scale.category10();
-
-var canvas = d3.select('body').append('svg')
-             .attr('width', 500)
-             .attr('height', 500);
-/**
- * How d3 works when building a tree map
-
-function start() {
-  var cells, _x = 20;
-
-  var treemap = d3.layout.treemap().size([500, 500]).nodes(treeData);
-  //console.log(treemap);
-
-  cells = canvas.selectAll('g')
-  .data(treemap)
-  .enter()
-  .append('g')
-  .attr('class', 'cell');
-
-  cells.append('rect')
-  .attr('x', function(d) { return d.x; })
-  .attr('y', function(d) { return d.y; })
-  .attr('width', function(d) { return d.dx; })
-  .attr('height', function(d) { return d.dy; })
-  .attr('fill', function(d) { return d.children ? null : color(d.parent.name); })
-  .attr('stroke', '#fff');
-
-
-  cells.append('text')
-  .attr('x', function(d) { _x = d.x; return d.x + d.dx / 2})
-  .attr('y', function(d) { return d.y + d.dy / 2})
-  .attr('text-anchor', 'middle')
-  .attr('fill', '#fff')
-  .style('font-size', '24px')
-  .text(function(d) {return d.children ? null : d.name});
-}*/
 </script>
 
 </body>
