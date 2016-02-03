@@ -6,10 +6,12 @@ const dateformat  = require('dateformat');
 const prettyDate  = require('../utils/prettyDate.js');
 
 function getGuardianData() {
-  var finalResult = [], data, date;
+  var finalResult = [], data, date, tmpDate;
 
-  date = new Date();
-  date = date.setDate(date.getDate() - 7); //weeks data from the guardian
+  date    = new Date();
+  tmpDate = new Date();
+  date    = date.setDate(date.getDate() - 7); //weeks data from the guardian
+  tmpDate = tmpDate.setDate(tmpDate.getDate() - 7);
   date = dateformat(date, 'yyyy-mm-dd');
 
   return new Promise(function(resolve, reject) {
@@ -24,10 +26,10 @@ function getGuardianData() {
         data.date   = prettyDate(post.webPublicationDate);
         data.source = 'The Guardian';
         data.relationships = [];
-        data.size = 0;
+        data.size = 40;
         data.url    = post.webUrl;
 
-        finalResult.push(data);
+        if(new Date(data.date) >= tmpDate) finalResult.push(data);
       });
       resolve(finalResult);
     });

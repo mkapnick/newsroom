@@ -4,7 +4,10 @@ var Promise   = require('bluebird');
 var prettyDate= require('../utils/prettyDate.js');
 
 function getWebhoseData() {
-  var finalResult = [], data;
+  var finalResult = [], data, tmpDate;
+
+  tmpDate = new Date();
+  tmpDate = tmpDate.setDate(tmpDate.getDate() - 7);
 
   return new Promise(function(resolve, reject) {
     unirest.get("https://webhose.io/search?token=cc9ae752-e554-4216-907" +
@@ -19,10 +22,9 @@ function getWebhoseData() {
         data.date  = prettyDate(post.published);
         data.source = 'Webhose';
         data.relationships = [];
-        data.size = 0;
+        data.size = 40;
         data.url    = post.url;
-
-        finalResult.push(data);
+        if(new Date(data.date) >= tmpDate) finalResult.push(data);
       });
 
       resolve(finalResult);

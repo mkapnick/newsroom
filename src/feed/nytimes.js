@@ -54,8 +54,10 @@ function getNYTimesData() {
 
 
 function _queryNewswireAPI(hoursAgo) {
-  var data, url, finalResult = [];
+  var data, url, finalResult = [], tmpDate;
 
+  tmpDate = new Date();
+  tmpDate = tmpDate.setDate(tmpDate.getDate() - 7);
   url = 'http://api.nytimes.com/svc/news/v3/content/all/' +
         'health/'+hoursAgo+'.json?api-key=9200ed51051ad23b20f2de81661697bf:15:69251599';
 
@@ -73,7 +75,7 @@ function _queryNewswireAPI(hoursAgo) {
           data.relationships = [];
           data.size   = 0;
           data.url    = post.url;
-          finalResult.push(data);
+          if(new Date(data.date) >= tmpDate) finalResult.push(data);
         });
       }
       resolve(finalResult)
@@ -107,9 +109,13 @@ function _queryArticlesAPI(page, date) {
           data.date   = prettyDate(post.pub_date);
           data.source = 'The New York Times';
           data.relationships = [];
-          data.size   = 0;
+          data.size   = 40;
           data.url    = post.web_url;
-          finalResult.push(data);
+
+          if(data.date >= new Date().getDate() - 4)
+          {
+            finalResult.push(data);
+          }
         });
       }
       resolve(finalResult)
