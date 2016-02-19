@@ -15,6 +15,7 @@ function getWebhoseData() {
                 "%20physician%20language%3A(english)%20thread.country%3AUS")
     .header("Accept", "text/plain")
     .end(function (result) {
+      console.log('got webhose results...');
       result.body.posts.map(post => {
         data = {};
         data.name   = post.thread.title;

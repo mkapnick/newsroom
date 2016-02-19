@@ -2,7 +2,8 @@ head
   include  _resources.jade
 body
   .navbar
-    img(src="/public/images/nyu_logo.png")
+    img(src="/public/images/iime.png" id="img-iime")
+
   #treemap
 
   script(src="http://momentjs.com/downloads/moment.min.js")
@@ -50,7 +51,7 @@ body
         .timing({
           transitions: 1000
         })
-        .margin("5px 0px 60px 0px")
+        .margin("10px 0px 60px 0px")
         .color('color')
         .format({
           "text": function (text, params) {
@@ -66,7 +67,18 @@ body
             }
           }
         })
-        .draw(); // finally, draw the visualization!
+        .draw() // finally, draw the visualization!
+
+        //wait 3 seconds (enough time to draw the visualization) and
+        //then call the timeline
+        setTimeout(function () {
+          _loopTimeLine();
+        }, 3000);
+
+      }
+
+      function _loopTimeLine() {
+        d3.select('.d3plus_timeline_play').on('click')();
       }
 
       return {
