@@ -12,12 +12,7 @@ server.listen(3008);
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 
-app.use('/static', express.static(path.join(__dirname, 'src/dependencies')));
-app.use('/statik', express.static(__dirname + '/node_modules'));
-app.use('/statik/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
-app.use('/statik/d3', express.static(__dirname + '/node_modules/d3'));
-app.use('/statik/views', express.static(__dirname + '/views/common/'));
-
+app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
   res.render('index');
