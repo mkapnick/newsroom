@@ -23,12 +23,14 @@
     "d3": "^3.5.14",
     "dateformat": "^1.0.12",
     "express": "^4.13.4",
-    "hbs": "^4.0.0",
     "jquery": "^2.2.0",
     "jquery-ui": "^1.10.5",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "underscore": "^1.8.3",
     "unirest": "^0.4.2"
+  },
+  "dependencies": {
+    "jade": "^1.11.0"
   }
 }

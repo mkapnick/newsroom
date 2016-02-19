@@ -1,0 +1,72 @@
+head
+  include  _resources.jade
+body
+  #treemap
+
+  script(src="http://momentjs.com/downloads/moment.min.js")
+  script(src="http://www.d3plus.org/js/d3.js")
+  script(src="http://www.d3plus.org/js/d3plus.js")
+
+  script.
+    var date;
+    date = moment(new Date()).format('YYYY/MM/DD');
+    console.log(date);
+
+    function TreeMap() {
+      var treeData = {};
+
+      function loadData() {
+        $.ajax({
+          type: 'GET',
+          url: '/data',
+          dataType: 'json',
+          success: function (data) {
+            if (data) {
+              treeData = data;
+              renderData();
+            }
+          }
+        });
+      }
+
+      function renderData() {
+        d3plus.viz()
+        .container("#treemap")  // container DIV to hold the visualization
+        .data(treeData)  // data to use with the vis
+        .type("tree_map")   // visualization type
+        .id(['name'])         // key for which our data is unique on
+        .size("size")      // sizing of blocks
+        .dev(true)
+        .time({
+          "value": "date",
+          "solo": date
+        })
+        .color('color')
+        .format({
+          "text": function (text, params) {
+
+            if (text === "size") {
+              return "Number of related articles";
+            }
+            else if (text === 'share') {
+              return 'Title similarity'
+            }
+            else {
+              return d3plus.string.title(text, params);
+            }
+          }
+        })
+        .draw(); // finally, draw the visualization!
+      }
+
+      return {
+        loadData,
+        renderData
+      };
+    }
+
+    new TreeMap().loadData();
+
+
+
+

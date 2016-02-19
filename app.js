@@ -9,7 +9,7 @@ var feedData    = require('./src/feedData.js');
 
 server.listen(3008);
 
-app.set('view engine', 'hbs');
+app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 
 app.use('/static', express.static(path.join(__dirname, 'src/dependencies')));
@@ -20,7 +20,7 @@ app.use('/statik/views', express.static(__dirname + '/views/common/'));
 
 
 app.get('/', function(req, res) {
-  res.render('index.hbs');
+  res.render('index');
 });
 
 app.get('/data', function(req, res, next) {
@@ -30,7 +30,7 @@ app.get('/data', function(req, res, next) {
     console.log('num articles fetched: ' + data.length);
     console.log('rendering....');
     res.json(data);
-  })
+  });
 });
 
 
