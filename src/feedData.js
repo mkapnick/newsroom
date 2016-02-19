@@ -28,17 +28,17 @@ var sourceHandlers = {
         checkedArray, content = [];
 
     return Promise.all([
-      //webhose.query()
-      //nytimes.query(),
+      webhose.query(),
+      nytimes.query(),
       guardian.query()
-    ]).spread((webhoseData) => {
-      return { webhoseData };
+    ]).spread((webhoseData, nytimesData, guardianData) => {
+      return { webhoseData, nytimesData, guardianData };
     })
     .then(data => {
 
       content       = content.concat(data.webhoseData);
-      //content       = content.concat(data.nytimesData);
-      //content       = content.concat(data.guardianData);
+      content       = content.concat(data.nytimesData);
+      content       = content.concat(data.guardianData);
       currentValue  = 55; //threshold
 
       /*content.forEach((thisArticle, index) => {
