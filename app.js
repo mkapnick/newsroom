@@ -18,7 +18,7 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.get('/data', function(req, res, next) {
+app.get('/data', function(req, res) {
   console.log('fetching data...');
   feedData.getData(req.query.s)
   .then((data) => {

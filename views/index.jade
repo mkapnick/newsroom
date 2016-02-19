@@ -1,6 +1,8 @@
 head
   include  _resources.jade
 body
+  .navbar
+    img(src="/public/images/nyu_logo.png")
   #treemap
 
   script(src="http://momentjs.com/downloads/moment.min.js")
@@ -41,6 +43,7 @@ body
           "value": "date",
           "solo": date
         })
+        .margin("0px 0px 60px 0px")
         .color('color')
         .format({
           "text": function (text, params) {
